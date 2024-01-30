@@ -79,18 +79,13 @@ client.on("interactionCreate", async (interaction) => {
 
 		const embeds = [];
 		embeds.push(embed);
-		// let first = true;
-		// if (snipe.images) {
-		// 	for (const ma of snipe.images.values()) {
-		// 		if (first) {
-		// 			first = false;
-		// 			continue;
-		// 		}
-		// 		embeds.push(new MessageEmbed()
-		// 			.setURL(snipe.link)
-		// 			.setImage(ma.url ? ma.url : ma.proxyURL))
-		// 	}
-		// }
+		if (snipe.images) {
+			for (const ma of snipe.images.values()) {
+				embeds.push(new MessageEmbed()
+					.setURL(snipe.link)
+					.setImage(ma.url ? ma.url : ma.proxyURL));
+			}
+		}
 
 		// if (snipe.content) {
 		// 	embed.setDescription(snipe.content)
