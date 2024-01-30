@@ -88,12 +88,11 @@ client.on("interactionCreate", async (interaction) => {
 				const firstMatch = s.match(tenorREGEX)[0].trim();
 				if (firstMatch.startsWith("https://tenor.com/view/")) {
 					//console.log(firstMatch.slice(23))
-					fetch(`https://tenor.googleapis.com/v2/search?q=${firstMatch.slice(23)}&key=${token.tenor_token}&limit=1`)
+					await fetch(`https://tenor.googleapis.com/v2/search?q=${firstMatch.slice(23)}&key=${token.tenor_token}&limit=1`)
 						.then((result) => (result.json())).then(result => {
-							//console.log(result);
-							console.log(result["results"][0]["url"])
-							console.log(result["results"][0]["media_formats"]["gif"]["url"])
-							images.push(result["results"][0]["media_formats"]["gif"]["url"])
+							const finale_GIF_URL = result["results"][0]["media_formats"]["gif"]["url"].trim();
+							console.log(finale_GIF_URL)
+							images.push(finale_GIF_URL);
 						}).catch(e => {
 							console.error(e);
 						})
