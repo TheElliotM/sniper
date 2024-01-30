@@ -71,25 +71,24 @@ client.on("interactionCreate", async (interaction) => {
 			.setAuthor(snipe.author.tag)
 			.setFooter(`#${channel.name}`)
 			.setTimestamp(snipe.createdAt)
-			.setDescription(snipe.content ? snipe.content : "")
+			.setDescription(snipe.content)
+			.setImage(snipe.images ? snipe.images.first().url ? snipe.images.first().url : snipe.images.first().proxyURL : null)
 			.setURL(snipe.link);
 
 		const embeds = [];
 		embeds.push(embed);
-
+		let first = true;
 		if (snipe.images) {
 			for (const ma of snipe.images.values()) {
+				if (first) {
+					first = false;
+					continue;
+				}
 				embeds.push(new MessageEmbed()
 					.setURL(snipe.link)
 					.setImage(ma.url ? ma.url : ma.proxyURL))
 			}
 		}
-
-		if (embeds.length > 1) {
-			embeds[0].setImage(snipe.images.first().url ? snipe.images.first().url : snipe.images.first().proxyURL)
-			embeds.splice(1, 1)
-		}
-
 
 		// if (snipe.content) {
 		// 	embed.setDescription(snipe.content)
