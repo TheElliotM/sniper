@@ -9,14 +9,6 @@ const client = new Client({
 });
 const { token } = require("../config.json");
 
-const Tenor = require("tenorjs").client({
-	"Key": token.tenor_token, // https://tenor.com/developer/keyregistration
-	"Filter": "off", // "off", "low", "medium", "high", not case sensitive
-	"Locale": "en_US", // Your locale here, case-sensitivity depends on input
-	"MediaFilter": "minimal", // either minimal or basic, not case sensitive
-	"DateFormat": "MM/D/YYYY - H:mm:ss A" // Change this accordingly
-});
-
 const snipes = {};
 const editSnipes = {};
 const reactionSnipes = {};
