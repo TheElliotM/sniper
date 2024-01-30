@@ -88,7 +88,7 @@ client.on("interactionCreate", async (interaction) => {
 				const firstMatch = s.match(tenorREGEX)[0].trim();
 				if (firstMatch.startsWith("https://tenor.com/view/")) {
 					//console.log(firstMatch.slice(23))
-					await fetch(`firstMatch`)
+					await fetch(firstMatch)
 						.then((result) => (result.text())).then(result => {
 							console.log(result)
 						}).catch(e => {
