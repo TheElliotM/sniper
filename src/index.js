@@ -72,10 +72,10 @@ client.on("interactionCreate", async (interaction) => {
 			.setTimestamp(snipe.createdAt)
 			.setDescription(snipe.content);
 
-		console.log(snipe.images);
+		console.log(snipe.images.values());
 
 		for (let i in snipe.images.values()) {
-			console.log(i);
+			console.log(snipe.images.values()[i]);
 		}
 
 		// if (snipe.content) {
