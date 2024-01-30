@@ -106,11 +106,12 @@ client.on("interactionCreate", async (interaction) => {
 		}
 
 		const embed = new MessageEmbed()
-			.setAuthor(snipe.author.username !== snipe.author.displayName ? `${snipe.author.displayName} (${snipe.author.username})` : `${snipe.author.username}`)
+			.setAuthor(snipe.author.username)
 			.setFooter(`#${channel.name}`)
 			.setTimestamp(snipe.createdAt)
 			.setDescription(snipe.content)
 			.setImage(images.length > 0 ? images[0] : null)
+			.setThumbnail(snipe.author.displayAvatarURL())
 			.setURL(snipe.link);
 
 		embeds.push(embed);
@@ -168,10 +169,10 @@ client.on("interactionCreate", async (interaction) => {
 
 		const embed = new MessageEmbed()
 			.setDescription(snipe.content)
-			.setTitle(`Updated Message`)
-			.setAuthor(snipe.author.username !== snipe.author.displayName ? `${snipe.author.displayName} (${snipe.author.username})` : `${snipe.author.username}`)
-			.setFooter(`#${channel.name}`)
+			.setAuthor(snipe.author.username)
+			.setFooter(`[#${channel.name}](${snipe.newURL})`)
 			.setTimestamp(snipe.createdAt)
+			.setThumbnail(snipe.author.displayAvatarURL())
 			.setImage(images.length > 0 ? images[0] : null)
 			.setURL(snipe.newURL);
 
@@ -185,7 +186,7 @@ client.on("interactionCreate", async (interaction) => {
 					continue;
 				}
 				embeds.push(new MessageEmbed()
-					.setURL(snipe.link)
+					.setURL(snipe.newURL)
 					.setImage(imgURL));
 			}
 		}
@@ -204,9 +205,10 @@ client.on("interactionCreate", async (interaction) => {
 					snipe.emoji
 				)} on [this message](${snipe.messageURL})`
 			)
-			.setAuthor(snipe.user.username !== snipe.user.displayName ? `${snipe.user.displayName} (${snipe.user.username})` : `${snipe.user.username}`)
+			.setAuthor(snipe.author.username)
 			.setFooter(`#${channel.name}`)
-			.setTimestamp(snipe.createdAt);
+			.setThumbnail(snipe.author.displayAvatarURL())
+			.setImage(snipe.createdAt);
 
 		if (snipe.emoji.id && !snipe.emoji.available) {
 			const emojiImage = snipe.emoji.url;
