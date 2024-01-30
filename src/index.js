@@ -75,20 +75,22 @@ client.on("interactionCreate", async (interaction) => {
 			.setImage(snipe.images ? snipe.images.first().url ? snipe.images.first().url : snipe.images.first().proxyURL : null)
 			.setURL(snipe.link);
 
+		console.log(embed);
+
 		const embeds = [];
 		embeds.push(embed);
-		let first = true;
-		if (snipe.images) {
-			for (const ma of snipe.images.values()) {
-				if (first) {
-					first = false;
-					continue;
-				}
-				embeds.push(new MessageEmbed()
-					.setURL(snipe.link)
-					.setImage(ma.url ? ma.url : ma.proxyURL))
-			}
-		}
+		// let first = true;
+		// if (snipe.images) {
+		// 	for (const ma of snipe.images.values()) {
+		// 		if (first) {
+		// 			first = false;
+		// 			continue;
+		// 		}
+		// 		embeds.push(new MessageEmbed()
+		// 			.setURL(snipe.link)
+		// 			.setImage(ma.url ? ma.url : ma.proxyURL))
+		// 	}
+		// }
 
 		// if (snipe.content) {
 		// 	embed.setDescription(snipe.content)
@@ -101,7 +103,7 @@ client.on("interactionCreate", async (interaction) => {
 		// 	}
 		// }
 
-		await interaction.reply({ embeds: [embeds] });
+		await interaction.reply({ embeds: embeds });
 	} else if (interaction.commandName === "editsnipe") {
 		const snipe = editSnipes[channel.id];
 		if (!snipe) return interaction.reply("There's nothing to snipe!");
