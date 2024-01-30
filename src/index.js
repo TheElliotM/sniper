@@ -105,8 +105,8 @@ client.on("interactionCreate", async (interaction) => {
 			.setFooter(`#${channel.name}`)
 			.setTimestamp(snipe.createdAt);
 
-		if (emoji.id && !emoji.available) {
-			const emojiImage = emoji.imageURL();
+		if (snipe.emoji.id && !snipe.emoji.available) {
+			const emojiImage = snipe.emoji.imageURL();
 			if (emojiImage != null)
 				embed.setImage(emojiImage);
 		}
