@@ -1,3 +1,4 @@
+
 const { Client, Intents, MessageEmbed } = require("discord.js");
 const client = new Client({
 	intents: [
@@ -30,9 +31,7 @@ client.on("messageDelete", async (message) => {
 		author: message.author,
 		content: message.content,
 		createdAt: message.createdTimestamp,
-		image: message.attachments.first()
-			? message.attachments.first().proxyURL
-			: null,
+		images: message.attachments ? message.attachments : null,
 	};
 });
 
@@ -70,23 +69,23 @@ client.on("interactionCreate", async (interaction) => {
 		const embed = new MessageEmbed()
 			.setAuthor(snipe.author.tag)
 			.setFooter(`#${channel.name}`)
-			.setTimestamp(snipe.createdAt);
+			.setTimestamp(snipe.createdAt)
+			.setDescription(snipe.content);
 
-		snipe.image ? embed.setImage(snipe.image) : null;
-
-		if (snipe.content) {
-			if (snipe.content.trim().startsWith("https://") &&
-				snipe.content.trim().includes(".gif") &&
-				!snipe.content.trim().includes(" ")) {
-
-				let url = snipe.content;
-				embed.setImage(url);
-			} else if (snipe.content.startsWith("https://tenor.com/")) {
-
-			} else {
-				embed.setDescription(snipe.content)
-			}
+		for (let i in snipe.images.values()) {
+			console.log(i);
 		}
+
+		// if (snipe.content) {
+		// 	embed.setDescription(snipe.content)
+		// 	if (snipe.content.includes("https://") && snipe.content.includes(".gif")) {
+		// 		const link = snipe.content.slice(snipe.content.indexOf("https://"), snipe.content.indexOf(".gif") + 4);
+		// 		if (!link.includes(" "))
+		// 			embed.setImage(url);
+		// 	} else if (snipe.content.startsWith("https://tenor.com/")) {
+
+		// 	}
+		// }
 
 		await interaction.reply({ embeds: [embed] });
 	} else if (interaction.commandName === "editsnipe") {
