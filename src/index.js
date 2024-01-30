@@ -87,12 +87,13 @@ client.on("interactionCreate", async (interaction) => {
 			} else if (s.includes("https://tenor.com/view/") && s.match(tenorREGEX).length > 0) {
 				const firstMatch = s.match(tenorREGEX)[0].trim();
 				if (firstMatch.startsWith("https://tenor.com/view/")) {
-					console.log(firstMatch.slice(23))
+					//console.log(firstMatch.slice(23))
 					fetch(`https://tenor.googleapis.com/v2/search?q=${firstMatch.slice(23)}&key=${token.tenor_token}&limit=1`)
 						.then((result) => (result.json())).then(result => {
 							//console.log(result);
-
-							images.push(result["results"][0]["url"])
+							console.log(result["results"][0]["url"])
+							console.log(result["results"][0]["media_formats"]["gif"]["url"])
+							images.push(result["results"][0]["media_formats"]["gif"]["url"])
 						}).catch(e => {
 							console.error(e);
 						})
