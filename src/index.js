@@ -76,9 +76,10 @@ client.on("interactionCreate", async (interaction) => {
 		const embedFinale = { embeds: [embed] }
 
 		if (snipe.images) {
-			snipe.images.values().forEach(ma => {
+			for (const ma of snipe.images.values()) {
+				console.log(ma);
 				images.push(new MessageAttachment(ma.url ? ma.url : ma.proxyURL))
-			})
+			}
 			embedFinale["files"] = images;
 		}
 
