@@ -93,9 +93,8 @@ client.on("interactionCreate", async (interaction) => {
 						.then((result) => (result.text())).then(result => {
 							console.log(result)
 							const $ = cheerio.load(result);
-							var a = $(this);
-							const finaleurl = a.find('div#single-gif-container').find('img').attr('src');
-							console.log(finaleurl);
+							const final_url = $('div#single-gif-container').find('img').attr('src');
+							console.log(final_url);
 						}).catch(e => {
 							console.error(e);
 						})
