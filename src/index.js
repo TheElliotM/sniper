@@ -92,7 +92,7 @@ client.on("interactionCreate", async (interaction) => {
 			.setFooter(`#${channel.name}`)
 			.setTimestamp(snipe.createdAt)
 			.setDescription(snipe.content)
-			.setImage(images.length > 0 ? images.first() : null)
+			.setImage(images.length > 0 ? images[0] : null)
 			.setURL(snipe.link);
 
 		embeds.push(embed);
