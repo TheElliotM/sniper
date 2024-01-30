@@ -75,7 +75,10 @@ client.on("interactionCreate", async (interaction) => {
 		snipe.image ? embed.setImage(snipe.image) : null;
 
 		if (snipe.content) {
-			if (snipe.content.startsWith("https://") && snipe.content.endsWith(".gif")) {
+			if (snipe.content.trim().startsWith("https://") &&
+				snipe.content.trim().includes(".gif") &&
+				!snipe.content.trim().includes(" ")) {
+
 				let url = snipe.content;
 				embed.setImage(url);
 			} else if (snipe.content.startsWith("https://tenor.com/")) {
