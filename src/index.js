@@ -71,7 +71,7 @@ client.on("interactionCreate", async (interaction) => {
 			.setAuthor(snipe.author.tag)
 			.setFooter(`#${channel.name}`)
 			.setTimestamp(snipe.createdAt)
-			.setDescription(snipe.content ? snipe.content : ""),
+			.setDescription(snipe.content ? snipe.content : "")
 			.setURL(snipe.link);
 
 		const embeds = [];
