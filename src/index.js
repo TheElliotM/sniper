@@ -9,6 +9,7 @@ const client = new Client({
 	partials: ["MESSAGE", "REACTION", "USER"],
 });
 const token = require("../config.json");
+const fetch = require("node-fetch");
 
 const snipes = {};
 const editSnipes = {};
