@@ -67,17 +67,13 @@ client.on("interactionCreate", async (interaction) => {
 		const snipe = snipes[channel.id];
 		if (!snipe) return interaction.reply("There's nothing to snipe!");
 
-		console.log(snipe.images)
-
 		const embed = new MessageEmbed()
 			.setAuthor(snipe.author.tag)
 			.setFooter(`#${channel.name}`)
 			.setTimestamp(snipe.createdAt)
 			.setDescription(snipe.content)
-			.setImage(snipe.images ? snipe.images.first().url ? snipe.images.first().url : snipe.images.first().proxyURL : null)
+			.setImage(snipe.images.size > 0 ? snipe.images.first().url ? snipe.images.first().url : snipe.images.first().proxyURL : null)
 			.setURL(snipe.link);
-
-		;
 
 		const embeds = [];
 		embeds.push(embed);
