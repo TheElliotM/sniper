@@ -170,7 +170,7 @@ client.on("interactionCreate", async (interaction) => {
 		const embed = new MessageEmbed()
 			.setDescription(snipe.content)
 			.setAuthor(snipe.author.username)
-			.setFooter(`[#${channel.name}](${snipe.newURL})`)
+			.setFooter(`#${channel.name}`)
 			.setTimestamp(snipe.createdAt)
 			.setThumbnail(snipe.author.displayAvatarURL())
 			.setImage(images.length > 0 ? images[0] : null)
@@ -205,9 +205,9 @@ client.on("interactionCreate", async (interaction) => {
 					snipe.emoji
 				)} on [this message](${snipe.messageURL})`
 			)
-			.setAuthor(snipe.author.username)
+			.setAuthor(snipe.user.username)
 			.setFooter(`#${channel.name}`)
-			.setThumbnail(snipe.author.displayAvatarURL())
+			.setThumbnail(snipe.user.displayAvatarURL())
 			.setImage(snipe.createdAt);
 
 		if (snipe.emoji.id && !snipe.emoji.available) {
