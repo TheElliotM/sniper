@@ -1,5 +1,5 @@
 
-const { Client, Intents, MessageEmbed } = require("discord.js");
+const { Client, Intents, MessageEmbed, MessageAttachment } = require("discord.js");
 const client = new Client({
 	intents: [
 		Intents.FLAGS.GUILDS,
@@ -72,11 +72,14 @@ client.on("interactionCreate", async (interaction) => {
 			.setTimestamp(snipe.createdAt)
 			.setDescription(snipe.content);
 
+		const images = [];
+		const embedFinale = { embeds: [embed] }
+
 		if (snipe.images) {
-			const imageValues = snipe.images.values();
-			for (let i in imageValues) {
-				console.log(i);
-			}
+			snipe.images.values().forEach(ma => {
+				images.push(new MessageAttachment(ma.url ? ma.url : ma.proxyURL))
+			})
+			embedFinale["files"] = images;
 		}
 
 		// if (snipe.content) {
@@ -90,7 +93,7 @@ client.on("interactionCreate", async (interaction) => {
 		// 	}
 		// }
 
-		await interaction.reply({ embeds: [embed] });
+		await interaction.reply(embedFinale);
 	} else if (interaction.commandName === "editsnipe") {
 		const snipe = editSnipes[channel.id];
 		if (!snipe) return interaction.reply("There's nothing to snipe!");
