@@ -106,7 +106,7 @@ client.on("interactionCreate", async (interaction) => {
 		}
 
 		const embed = new MessageEmbed()
-			.setAuthor(snipe.user.username !== snipe.user.displayName ? `${snipe.user.displayName} (${snipe.user.username})` : `${snipe.user.username}`)
+			.setAuthor(snipe.author.username !== snipe.author.displayName ? `${snipe.author.displayName} (${snipe.author.username})` : `${snipe.author.username}`)
 			.setFooter(`#${channel.name}`)
 			.setTimestamp(snipe.createdAt)
 			.setDescription(snipe.content)
@@ -169,7 +169,7 @@ client.on("interactionCreate", async (interaction) => {
 		const embed = new MessageEmbed()
 			.setDescription(snipe.content)
 			.setTitle(`Updated Message`)
-			.setAuthor(snipe.user.username !== snipe.user.displayName ? `${snipe.user.displayName} (${snipe.user.username})` : `${snipe.user.username}`)
+			.setAuthor(snipe.author.username !== snipe.author.displayName ? `${snipe.author.displayName} (${snipe.author.username})` : `${snipe.author.username}`)
 			.setFooter(`#${channel.name}`)
 			.setTimestamp(snipe.createdAt)
 			.setImage(images.length > 0 ? images[0] : null)
