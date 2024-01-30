@@ -76,6 +76,7 @@ client.on("interactionCreate", async (interaction) => {
 				images.push(ma.url ? ma.url : ma.proxyURL);
 
 		if (snipe.content) {
+			console.log(snipe.content)
 			const allBits = [...snipe.content.matchAll(urlREGEX)];
 			console.log(allBits)
 			for (let bit of allBits) {
