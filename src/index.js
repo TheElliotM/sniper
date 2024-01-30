@@ -71,7 +71,7 @@ client.on("interactionCreate", async (interaction) => {
 			.setAuthor(snipe.author.tag)
 			.setFooter(`#${channel.name}`)
 			.setTimestamp(snipe.createdAt)
-			.setDescription(snipe.content)
+			.setDescription(snipe.content ? snipe.content : " ")
 			.setURL(snipe.link);
 
 		const embeds = [];
@@ -96,7 +96,7 @@ client.on("interactionCreate", async (interaction) => {
 		// 	}
 		// }
 
-		await interaction.reply(embeds);
+		await interaction.reply({ embeds: [embeds] });
 	} else if (interaction.commandName === "editsnipe") {
 		const snipe = editSnipes[channel.id];
 		if (!snipe) return interaction.reply("There's nothing to snipe!");
