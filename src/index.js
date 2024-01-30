@@ -71,26 +71,32 @@ client.on("interactionCreate", async (interaction) => {
 			.setAuthor(snipe.author.tag)
 			.setFooter(`#${channel.name}`)
 			.setTimestamp(snipe.createdAt);
-		snipe.content ? embed.setDescription(snipe.content) : null;
+
 		snipe.image ? embed.setImage(snipe.image) : null;
+
+		if (snipe.content) {
+			if (snipe.content.startsWith("https://") && snipe.content.endsWith(".gif")) {
+				let url = snipe.content;
+				embed.setImage(url);
+			} else if (snipe.content.startsWith("https://tenor.com/")) {
+
+			} else {
+				embed.setDescription(snipe.content)
+			}
+		}
 
 		await interaction.reply({ embeds: [embed] });
 	} else if (interaction.commandName === "editsnipe") {
 		const snipe = editSnipes[channel.id];
+		if (!snipe) return interaction.reply("There's nothing to snipe!");
 
-		await interaction.reply(
-			snipe
-				? {
-					embeds: [
-						new MessageEmbed()
-							.setDescription(snipe.content)
-							.setAuthor(snipe.author.tag)
-							.setFooter(`#${channel.name}`)
-							.setTimestamp(snipe.createdAt),
-					],
-				}
-				: "There's nothing to snipe!"
-		);
+		const embed = new MessageEmbed()
+			.setDescription(snipe.content)
+			.setAuthor(snipe.author.tag)
+			.setFooter(`#${channel.name}`)
+			.setTimestamp(snipe.createdAt);
+
+		await interaction.reply({ embeds: [embed] });
 	} else if (interaction.commandName === "reactionsnipe") {
 		const snipe = reactionSnipes[channel.id];
 		if (!snipe) return interaction.reply("There's nothing to snipe!");
