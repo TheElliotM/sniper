@@ -32,6 +32,7 @@ client.on("messageDelete", async (message) => {
 		content: message.content,
 		createdAt: message.createdTimestamp,
 		images: message.attachments ? message.attachments : null,
+		link: message.url
 	};
 });
 
@@ -70,17 +71,18 @@ client.on("interactionCreate", async (interaction) => {
 			.setAuthor(snipe.author.tag)
 			.setFooter(`#${channel.name}`)
 			.setTimestamp(snipe.createdAt)
-			.setDescription(snipe.content);
+			.setDescription(snipe.content)
+			.setURL(snipe.link);
 
-		const images = [];
-		const embedFinale = { embeds: [embed] }
+		const embeds = [];
+		embeds.push(embed);
 
 		if (snipe.images) {
 			for (const ma of snipe.images.values()) {
-				console.log(ma);
-				images.push(new MessageAttachment(ma.url ? ma.url : ma.proxyURL))
+				embeds.push(new MessageEmbed()
+					.setURL(snipe.link)
+					.setImage(ma.url ? ma.url : ma.proxyURL))
 			}
-			embedFinale["files"] = images;
 		}
 
 		// if (snipe.content) {
@@ -94,7 +96,7 @@ client.on("interactionCreate", async (interaction) => {
 		// 	}
 		// }
 
-		await interaction.reply(embedFinale);
+		await interaction.reply(embeds);
 	} else if (interaction.commandName === "editsnipe") {
 		const snipe = editSnipes[channel.id];
 		if (!snipe) return interaction.reply("There's nothing to snipe!");
