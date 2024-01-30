@@ -99,14 +99,14 @@ client.on("interactionCreate", async (interaction) => {
 			.setDescription(
 				`reacted with ${formatEmoji(
 					snipe.emoji
-				)} on[this message](${snipe.messageURL})`
+				)} on [this message](${snipe.messageURL})`
 			)
 			.setAuthor(snipe.user.tag)
 			.setFooter(`#${channel.name}`)
 			.setTimestamp(snipe.createdAt);
 
 		if (snipe.emoji.id && !snipe.emoji.available) {
-			const emojiImage = snipe.emoji.imageURL();
+			const emojiImage = snipe.emoji.url;
 			if (emojiImage != null)
 				embed.setImage(emojiImage);
 		}
