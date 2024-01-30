@@ -90,8 +90,10 @@ client.on("interactionCreate", async (interaction) => {
 					console.log(firstMatch.slice(23))
 					fetch(`https://tenor.googleapis.com/v2/search?q=${firstMatch.slice(23)}&key=${token.tenor_token}&limit=1`)
 						.then((result) => (result.json())).then(result => {
-							console.log(result);
-							console.log(result["results"][0]["url"])
+							//console.log(result);
+							//console.log(result["results"][0]["url"])
+							if (result["results"] && result["results"].length > 0 && result["results"][0]["url"])
+								images.push(result["results"][0]["url"])
 						}).catch(e => {
 							console.error(e);
 						})
