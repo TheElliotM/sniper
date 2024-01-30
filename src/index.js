@@ -14,6 +14,8 @@ const snipes = {};
 const editSnipes = {};
 const reactionSnipes = {};
 
+const urlREGEX = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)\/\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)\.gif/g
+
 const formatEmoji = (emoji) => {
 	return !emoji.id || emoji.available
 		? emoji.toString() // bot has access or unicode emoji
@@ -67,40 +69,46 @@ client.on("interactionCreate", async (interaction) => {
 		const snipe = snipes[channel.id];
 		if (!snipe) return interaction.reply("There's nothing to snipe!");
 
+		const embeds = [], images = [];
+
+		if (snipe.images)
+			for (const ma of snipe.images.values())
+				images.push(ma.url ? ma.url : ma.proxyURL);
+
+		if (snipe.content) {
+			const allBits = [...snipe.content.matchAll(urlREGEX)];
+			console.log(allBits)
+			for (let bit of allBits) {
+				if (bit.startsWith("https://tenor.com/") && bit.endsWith(".gif")) {
+
+				} else if (bit.startsWith("https://") && bit.endsWith(".gif")) {
+					images.push(url);
+				}
+			}
+		}
+
 		const embed = new MessageEmbed()
-			.setAuthor(snipe.author.tag)
+			.setAuthor(snipe.author.username)
 			.setFooter(`#${channel.name}`)
 			.setTimestamp(snipe.createdAt)
 			.setDescription(snipe.content)
-			.setImage(snipe.images.size > 0 ? snipe.images.first().url ? snipe.images.first().url : snipe.images.first().proxyURL : null)
+			.setImage(images.length > 0 ? images.first() : null)
 			.setURL(snipe.link);
 
-		const embeds = [];
 		embeds.push(embed);
 
-		if (snipe.images) {
+		if (images.length > 0) {
 			let first = true;
-			for (const ma of snipe.images.values()) {
+			for (const imgURL of images) {
 				if (first) {
 					first = false;
 					continue;
 				}
 				embeds.push(new MessageEmbed()
 					.setURL(snipe.link)
-					.setImage(ma.url ? ma.url : ma.proxyURL));
+					.setImage(imgURL));
 			}
 		}
-
-		// if (snipe.content) {
-		// 	embed.setDescription(snipe.content)
-		// 	if (snipe.content.includes("https://") && snipe.content.includes(".gif")) {
-		// 		const link = snipe.content.slice(snipe.content.indexOf("https://"), snipe.content.indexOf(".gif") + 4);
-		// 		if (!link.includes(" "))
-		// 			embed.setImage(url);
-		// 	} else if (snipe.content.startsWith("https://tenor.com/")) {
-
-		// 	}
-		// }
 
 		await interaction.reply({ embeds: embeds });
 	} else if (interaction.commandName === "editsnipe") {
@@ -109,7 +117,7 @@ client.on("interactionCreate", async (interaction) => {
 
 		const embed = new MessageEmbed()
 			.setDescription(snipe.content)
-			.setAuthor(snipe.author.tag)
+			.setAuthor(snipe.author.username)
 			.setFooter(`#${channel.name}`)
 			.setTimestamp(snipe.createdAt);
 
@@ -124,7 +132,7 @@ client.on("interactionCreate", async (interaction) => {
 					snipe.emoji
 				)} on [this message](${snipe.messageURL})`
 			)
-			.setAuthor(snipe.user.tag)
+			.setAuthor(snipe.user.username)
 			.setFooter(`#${channel.name}`)
 			.setTimestamp(snipe.createdAt);
 
