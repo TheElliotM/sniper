@@ -208,12 +208,12 @@ client.on("interactionCreate", async (interaction) => {
 			.setAuthor(snipe.user.username)
 			.setFooter(`#${channel.name}`)
 			.setThumbnail(snipe.user.displayAvatarURL())
-			.setImage(snipe.createdAt);
+			.setTimestamp(snipe.createdAt);
 
 		if (snipe.emoji.id && !snipe.emoji.available) {
 			const emojiImage = snipe.emoji.url;
 			if (emojiImage != null)
-				embed.setThumbnail(emojiImage);
+				embed.setImage(emojiImage);
 		}
 
 		await interaction.reply({ embeds: [embed] });
