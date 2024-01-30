@@ -15,6 +15,7 @@ const editSnipes = {};
 const reactionSnipes = {};
 
 const urlREGEX = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)\/\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)\.gif/g
+const tenorREGEX = /https?:\/\/(www\.)?tenor\.com\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)\/\b([-a-zA-Z0-9()@:%_\+~#?&//=]*)\b/g
 
 const formatEmoji = (emoji) => {
 	return !emoji.id || emoji.available
@@ -80,8 +81,11 @@ client.on("interactionCreate", async (interaction) => {
 			if (s.includes("https://") && s.includes(".gif")) {
 				const embeddedURL = s.slice(s.indexOf("https://"), s.indexOf(".gif") + 4);
 				if (embeddedURL.match(urlREGEX).length > 0) {
-					console.log("FOUND: " + embeddedURL)
+					images.push(embeddedURL);
 				}
+			} else if (s.includes("https://tenor.com/") && s.match(tenorREGEX).length > 0) {
+				const firstMatch = s.match(tenorREGEX)[0];
+				console.log(firstMatch)
 			}
 		}
 
