@@ -91,10 +91,11 @@ client.on("interactionCreate", async (interaction) => {
 					//console.log(firstMatch.slice(23))
 					await fetch(firstMatch)
 						.then((result) => (result.text())).then(result => {
-							console.log(result)
+							//console.log(result)
 							const $ = cheerio.load(result);
 							const final_url = $('div#single-gif-container').find('img').attr('src');
-							console.log(final_url);
+							//console.log(final_url);
+							images.push(final_url);
 						}).catch(e => {
 							console.error(e);
 						})
