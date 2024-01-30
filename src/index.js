@@ -47,6 +47,8 @@ client.on("messageUpdate", async (oldMessage, newMessage) => {
 	editSnipes[oldMessage.channel.id] = {
 		author: oldMessage.author,
 		content: oldMessage.content,
+		images: oldMessage.attachments ? oldMessage.attachments : null,
+		newURL: newMessage.url,
 		createdAt: newMessage.editedTimestamp,
 	};
 });
@@ -104,7 +106,7 @@ client.on("interactionCreate", async (interaction) => {
 		}
 
 		const embed = new MessageEmbed()
-			.setAuthor(snipe.author.username)
+			.setAuthor(snipe.user.username !== snipe.user.displayName ? `${snipe.user.displayName} (${snipe.user.username})` : `${snipe.user.username}`)
 			.setFooter(`#${channel.name}`)
 			.setTimestamp(snipe.createdAt)
 			.setDescription(snipe.content)
@@ -128,16 +130,70 @@ client.on("interactionCreate", async (interaction) => {
 
 		await interaction.reply({ embeds: embeds });
 	} else if (interaction.commandName === "editsnipe") {
+
+
 		const snipe = editSnipes[channel.id];
 		if (!snipe) return interaction.reply("There's nothing to snipe!");
 
+		const embeds = [], images = [];
+
+		if (snipe.images)
+			for (const ma of snipe.images.values())
+				images.push(ma.url ? ma.url : ma.proxyURL);
+
+		if (snipe.content) {
+			const s = snipe.content;
+			if (s.includes("https://") && s.includes(".gif")) {
+				const embeddedURL = s.slice(s.indexOf("https://"), s.indexOf(".gif") + 4);
+				if (embeddedURL.match(urlREGEX).length > 0) {
+					images.push(embeddedURL);
+				}
+			} else if (s.includes("https://tenor.com/view/") && s.match(tenorREGEX).length > 0) {
+				const firstMatch = s.match(tenorREGEX)[0].trim();
+				if (firstMatch.startsWith("https://tenor.com/view/")) {
+					//console.log(firstMatch.slice(23))
+					await fetch(firstMatch)
+						.then((result) => (result.text())).then(result => {
+							//console.log(result)
+							const $ = cheerio.load(result);
+							const final_url = $('div#single-gif-container').find('img').attr('src');
+							//console.log(final_url);
+							images.push(final_url);
+						}).catch(e => {
+							console.error(e);
+						})
+				}
+			}
+		}
+
 		const embed = new MessageEmbed()
 			.setDescription(snipe.content)
-			.setAuthor(snipe.author.username)
+			.setTitle(`Updated Message`)
+			.setAuthor(snipe.user.username !== snipe.user.displayName ? `${snipe.user.displayName} (${snipe.user.username})` : `${snipe.user.username}`)
 			.setFooter(`#${channel.name}`)
-			.setTimestamp(snipe.createdAt);
+			.setTimestamp(snipe.createdAt)
+			.setImage(images.length > 0 ? images[0] : null)
+			.setURL(snipe.newURL);
 
-		await interaction.reply({ embeds: [embed] });
+		embeds.push(embed);
+
+		if (images.length > 0) {
+			let first = true;
+			for (const imgURL of images) {
+				if (first) {
+					first = false;
+					continue;
+				}
+				embeds.push(new MessageEmbed()
+					.setURL(snipe.link)
+					.setImage(imgURL));
+			}
+		}
+
+		await interaction.reply({ embeds: embeds });
+
+
+
 	} else if (interaction.commandName === "reactionsnipe") {
 		const snipe = reactionSnipes[channel.id];
 		if (!snipe) return interaction.reply("There's nothing to snipe!");
@@ -148,14 +204,14 @@ client.on("interactionCreate", async (interaction) => {
 					snipe.emoji
 				)} on [this message](${snipe.messageURL})`
 			)
-			.setAuthor(snipe.user.username)
+			.setAuthor(snipe.user.username !== snipe.user.displayName ? `${snipe.user.displayName} (${snipe.user.username})` : `${snipe.user.username}`)
 			.setFooter(`#${channel.name}`)
 			.setTimestamp(snipe.createdAt);
 
 		if (snipe.emoji.id && !snipe.emoji.available) {
 			const emojiImage = snipe.emoji.url;
 			if (emojiImage != null)
-				embed.setImage(emojiImage);
+				embed.setThumbnail(emojiImage);
 		}
 
 		await interaction.reply({ embeds: [embed] });
