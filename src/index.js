@@ -89,7 +89,7 @@ client.on("interactionCreate", async (interaction) => {
 				if (firstMatch.startsWith("https://tenor.com/view/")) {
 					console.log(firstMatch.slice(23))
 					fetch(`https://tenor.googleapis.com/v2/search?q=${firstMatch.slice(23)}&key=${token.tenor_token}&limit=1`)
-						.then((result) => (result.json()).then(result => {
+						.then((result) => (result.json())).then(result => {
 							console.log(result);
 							console.log(result["results"][0]["url"])
 						}).catch(e => {
