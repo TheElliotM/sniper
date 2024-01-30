@@ -10,6 +10,7 @@ const client = new Client({
 });
 const token = require("../config.json");
 const fetch = require("node-fetch");
+const cheerio = require('cheerio');
 
 const snipes = {};
 const editSnipes = {};
@@ -91,6 +92,10 @@ client.on("interactionCreate", async (interaction) => {
 					await fetch(firstMatch)
 						.then((result) => (result.text())).then(result => {
 							console.log(result)
+							const $ = cheerio.load(result);
+							var a = $(this);
+							const finaleurl = a.find('div#single-gif-container').find('img').attr('src');
+							console.log(finaleurl);
 						}).catch(e => {
 							console.error(e);
 						})
