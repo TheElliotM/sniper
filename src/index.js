@@ -76,14 +76,11 @@ client.on("interactionCreate", async (interaction) => {
 				images.push(ma.url ? ma.url : ma.proxyURL);
 
 		if (snipe.content) {
-			console.log(snipe.content)
-			const allBits = [...snipe.content.matchAll(urlREGEX)];
-			console.log(allBits)
-			for (let bit of allBits) {
-				if (bit.startsWith("https://tenor.com/") && bit.endsWith(".gif")) {
-
-				} else if (bit.startsWith("https://") && bit.endsWith(".gif")) {
-					images.push(url);
+			const s = snipe.content;
+			if (s.includes("https://") && s.includes(".gif")) {
+				const embeddedURL = s.slice(s.indexOf("https://"), s.indexOf(".gif") + 4);
+				if (embeddedURL.match(urlREGEX).length > 0) {
+					console.log("FOUND: " + embeddedURL)
 				}
 			}
 		}
