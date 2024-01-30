@@ -79,8 +79,14 @@ client.on("interactionCreate", async (interaction) => {
 
 		const embeds = [];
 		embeds.push(embed);
+
 		if (snipe.images) {
+			let first = true;
 			for (const ma of snipe.images.values()) {
+				if (first) {
+					first = false;
+					continue;
+				}
 				embeds.push(new MessageEmbed()
 					.setURL(snipe.link)
 					.setImage(ma.url ? ma.url : ma.proxyURL));
