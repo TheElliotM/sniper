@@ -8,14 +8,14 @@ const client = new Client({
 	],
 	partials: ["MESSAGE", "REACTION", "USER"],
 });
-const { token } = require("../config.json");
+const token = require("../config.json");
 
 const snipes = {};
 const editSnipes = {};
 const reactionSnipes = {};
 
 const urlREGEX = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)\/\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)\.gif/g
-const tenorREGEX = /https?:\/\/(www\.)?tenor\.com\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)\/\b([-a-zA-Z0-9()@:%_\+~#?&//=]*)\b/g
+const tenorREGEX = /https?:\/\/(www\.)?tenor\.com\/view\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)\/\b([-a-zA-Z0-9()@:%_\+~#?&//=]*)\b/g
 
 const formatEmoji = (emoji) => {
 	return !emoji.id || emoji.available
@@ -83,9 +83,17 @@ client.on("interactionCreate", async (interaction) => {
 				if (embeddedURL.match(urlREGEX).length > 0) {
 					images.push(embeddedURL);
 				}
-			} else if (s.includes("https://tenor.com/") && s.match(tenorREGEX).length > 0) {
-				const firstMatch = s.match(tenorREGEX)[0];
-				console.log(firstMatch)
+			} else if (s.includes("https://tenor.com/view/") && s.match(tenorREGEX).length > 0) {
+				const firstMatch = s.match(tenorREGEX)[0].trim();
+				if (firstMatch.startsWith("https://tenor.com/view/")) {
+					console.log(firstMatch.slice(23))
+					fetch(`https://tenor.googleapis.com/v2/search?q=${firstMatch.slice(23)}&key=${token.tenor_token}&limit=1`)
+						.then(result => {
+							console.log(result);
+						}).catch(e => {
+							console.error(e);
+						})
+				}
 			}
 		}
 
