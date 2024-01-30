@@ -71,7 +71,7 @@ client.on("interactionCreate", async (interaction) => {
 			.setAuthor(snipe.author.tag)
 			.setFooter(`#${channel.name}`)
 			.setTimestamp(snipe.createdAt)
-			.setDescription(snipe.content)
+			.setDescription(snipe.content ? snipe.content : "...")
 			.setImage(snipe.images ? snipe.images.first().url ? snipe.images.first().url : snipe.images.first().proxyURL : null)
 			.setURL(snipe.link);
 
