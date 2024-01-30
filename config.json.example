@@ -1,4 +1,6 @@
 {
 	"token": "",
-	"application_id": ""
+	"application_id": "",
+	"privilege": "",
+	"tenor_token": ""
 }

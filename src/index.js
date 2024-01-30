@@ -9,6 +9,14 @@ const client = new Client({
 });
 const { token } = require("../config.json");
 
+const Tenor = require("tenorjs").client({
+	"Key": token.tenor_token, // https://tenor.com/developer/keyregistration
+	"Filter": "off", // "off", "low", "medium", "high", not case sensitive
+	"Locale": "en_US", // Your locale here, case-sensitivity depends on input
+	"MediaFilter": "minimal", // either minimal or basic, not case sensitive
+	"DateFormat": "MM/D/YYYY - H:mm:ss A" // Change this accordingly
+});
+
 const snipes = {};
 const editSnipes = {};
 const reactionSnipes = {};
@@ -24,7 +32,7 @@ client.on("ready", () => {
 });
 
 client.on("messageDelete", async (message) => {
-	if (message.partial || (message.embeds.length && !message.content)) return; // content is null or deleted embed
+	if (message.partial || (message.embeds.length && !message.content)) return; // content is >
 
 	snipes[message.channel.id] = {
 		author: message.author,
@@ -65,7 +73,6 @@ client.on("interactionCreate", async (interaction) => {
 
 	if (interaction.commandName === "snipe") {
 		const snipe = snipes[channel.id];
-
 		if (!snipe) return interaction.reply("There's nothing to snipe!");
 
 		const embed = new MessageEmbed()
@@ -82,36 +89,37 @@ client.on("interactionCreate", async (interaction) => {
 		await interaction.reply(
 			snipe
 				? {
-						embeds: [
-							new MessageEmbed()
-								.setDescription(snipe.content)
-								.setAuthor(snipe.author.tag)
-								.setFooter(`#${channel.name}`)
-								.setTimestamp(snipe.createdAt),
-						],
-				  }
+					embeds: [
+						new MessageEmbed()
+							.setDescription(snipe.content)
+							.setAuthor(snipe.author.tag)
+							.setFooter(`#${channel.name}`)
+							.setTimestamp(snipe.createdAt),
+					],
+				}
 				: "There's nothing to snipe!"
 		);
 	} else if (interaction.commandName === "reactionsnipe") {
 		const snipe = reactionSnipes[channel.id];
+		if (!snipe) return interaction.reply("There's nothing to snipe!");
 
-		await interaction.reply(
-			snipe
-				? {
-						embeds: [
-							new MessageEmbed()
-								.setDescription(
-									`reacted with ${formatEmoji(
-										snipe.emoji
-									)} on [this message](${snipe.messageURL})`
-								)
-								.setAuthor(snipe.user.tag)
-								.setFooter(`#${channel.name}`)
-								.setTimestamp(snipe.createdAt),
-						],
-				  }
-				: "There's nothing to snipe!"
-		);
+		const embed = new MessageEmbed()
+			.setDescription(
+				`reacted with ${formatEmoji(
+					snipe.emoji
+				)} on[this message](${snipe.messageURL})`
+			)
+			.setAuthor(snipe.user.tag)
+			.setFooter(`#${channel.name}`)
+			.setTimestamp(snipe.createdAt);
+
+		if (emoji.id && !emoji.available) {
+			const emojiImage = emoji.imageURL();
+			if (emojiImage != null)
+				embed.setImage(emojiImage);
+		}
+
+		await interaction.reply({ embeds: [embed] });
 	}
 });
 

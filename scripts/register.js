@@ -1,5 +1,5 @@
-const { REST } = require("@discordjs/rest");
-const { Routes } = require("discord-api-types/v9");
+const { REST } = require('@discordjs/rest');
+const { Routes } = require('discord-api-types/v9');
 
 const { token, application_id } = require("../config.json");
 
@@ -42,7 +42,7 @@ const commands = [
 	},
 ];
 
-const rest = new REST({ version: "9" }).setToken(token);
+const rest = new REST({ version: '9' }).setToken(token);
 
 (async () => {
 	try {
@@ -50,6 +50,7 @@ const rest = new REST({ version: "9" }).setToken(token);
 
 		await rest.put(
 			guild
+
 				? Routes.applicationGuildCommands(application_id, guild)
 				: Routes.applicationCommands(application_id),
 			{
@@ -64,3 +65,4 @@ const rest = new REST({ version: "9" }).setToken(token);
 		console.error(error);
 	}
 })();
+

@@ -109,3 +109,5 @@ dist
 # other
 .DS_Store
 config.json
+
+start.sh
